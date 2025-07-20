@@ -1,0 +1,214 @@
+# 🎭 Agent Stage - AI Theater Platform
+
+A modular, chat-based AI theater platform where players interact with AI-powered agents in immersive scenarios. The first mode, "The Oval Office", puts you in the role of the President of the United States, making critical decisions with the help (and hindrance) of your AI advisors.
+
+## � **NEW: ACI.dev Tool Calling Integration**
+
+**Agent Stage now features real-world intelligence gathering!** Your AI advisors use ACI.dev's **generous FREE TIER** to research live information:
+
+- 🔍 **Real-time web search** for current events and public sentiment
+- 🛠️ **GitHub repository analysis** for technical solutions and research
+- 📊 **Professional intelligence gathering** with visual tool execution feedback
+- 🆓 **Generous free tier** - no credit card required, plenty of quota for extended gameplay
+
+**Your advisors now research like real presidential advisors!**
+
+## �🌟 Features
+
+### Core MVP (Implemented)
+- **8 AI Advisor System**: Complete presidential cabinet with unique personalities and expertise
+- **Smart Advisor Rotation**: Random selection of 3 advisors per turn from full 8-member roster
+- **Dynamic Event Generation**: OpenAI GPT creates realistic political, economic, and social events
+- **Anti-Repetition Engine**: Advanced system prevents duplicate responses across turns
+- **Voice Synthesis**: OpenAI TTS with real-world voice mapping for authentic audio experience
+- **Real-World Tool Calling**: Advisors use ACI.dev to gather live intelligence
+- **Enhanced Message System**: Direct caching eliminates timing issues and ensures fresh responses
+- **Comprehensive Debugging**: Full logging system for transparent advisor selection and response generation
+- **Professional TTS Integration**: OpenAI voices with AI-Coustics enhancement
+- **Decision Evaluation**: Complex consequence system with immediate and long-term effects
+- **World State Management**: Track key parameters like economy, military, public trust, etc.
+- **Real-time Chat Interface**: Interactive web-based interface for seamless gameplay
+
+### The Oval Office - Complete 8-Advisor Presidential Cabinet
+- **DJ Vans** (Chief of Staff) - High-energy communications expert with viral content focus
+- **General Jake Sullivan-Peters** (Secretary of Defense) - Military strategist with security expertise  
+- **Ilon Tusk** (Tech Advisor) - Innovation-driven technologist analyzing cutting-edge solutions
+- **Kellyanne Conway-Smith** (Senior Counselor) - Strategic political advisor with polling expertise
+- **Dr. Janet Powell-Chen** (Economic Advisor) - PhD economist focusing on financial stability
+- **Dr. Anthony Harrison** (Health Advisor) - Medical expert with public health perspective
+- **Alexandria Martinez-Torres** (Environmental Advisor) - Climate specialist with sustainability focus
+- **Director Sarah Thompson** (Intelligence Advisor) - CIA expert with national security insights
+
+**Each advisor features unique voice synthesis, distinct personality, and specialized expertise!**
+
+## 🔧 **Recent Major Updates**
+
+### ✅ **Enhanced Advisor System** (Latest)
+- **Expanded to 8 advisors** from original 4 for complete presidential cabinet experience
+- **Smart rotation system** selects 3 random advisors per turn for variety and replayability  
+- **Anti-repetition engine** ensures unique responses every turn across all advisors
+- **Voice synthesis mapping** with realistic speech patterns for each advisor
+- **Fixed UI issues** including typing indicator cleanup and message synchronization
+
+### ✅ **Performance & Reliability Fixes**
+- **Forced event generation** ensures new scenarios every turn (no more repeated events)
+- **Direct message caching** eliminates race conditions and timing issues
+- **Enhanced debugging system** with comprehensive logging for transparent operations
+- **Improved advisor selection** with preference system preventing recent advisor reuse
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- OpenAI API key
+- **Optional but Recommended**: ACI.dev free account for real-world intelligence
+
+### 🆓 **Super Easy ACI.dev Free Tier Setup** (5 minutes)
+1. Sign up free at [platform.aci.dev](https://platform.aci.dev/)
+2. Create a project and agent (free!)
+3. Configure BRAVE_SEARCH and GITHUB apps (free!)
+4. Get your API key and account ID
+5. Add to your .env file
+
+**Result**: Your advisors become dramatically more intelligent with real-world research capabilities!
+
+### Installation
+
+1. **Clone and setup:**
+   ```bash
+   cd agent_stage
+   npm install
+   ```
+
+2. **Configure environment:**
+   ```bash
+   cp .env.example .env
+   # Add your OpenAI API key
+   # Add your ACI.dev credentials (optional but awesome!)
+   ```
+
+3. **Quick start with ACI.dev:**
+   ```bash
+   ./start-with-aci.sh
+   ```
+
+3. **Build and run:**
+   ```bash
+   npm run build
+   npm start
+   ```
+   
+   Or for development:
+   ```bash
+   npm run dev
+   ```
+
+4. **Play the game:**
+   Open your browser to `http://localhost:3000`
+
+## 🎮 Enhanced Gaming Experience
+
+### **With ACI.dev Integration (Recommended):**
+1. **Start Your Presidency**: Click "Enter the Oval Office"
+2. **Receive Crisis Events**: Realistic political situations emerge
+3. **Watch Advisors Research**: See them gather real-world intelligence in real-time
+   - 🔍 DJ Vans searches trending topics and public sentiment
+   - 🛡️ General researches security threats and solutions
+   - 🚀 Ilon Tusk analyzes GitHub repos for tech innovations
+   - 🗳️ Kellyanne gathers political intelligence and polling data
+4. **Get Enhanced Advice**: Advisors provide data-driven counsel based on real research
+5. **Make Informed Decisions**: Choose actions based on current, real-world context
+6. **See Professional Process**: Experience how actual presidential advisors gather intelligence
+
+### **Visual Intelligence Indicators:**
+- ✅ **Tool Success**: See exactly what intelligence was gathered
+- 📊 **Data Previews**: Preview of research results
+- ⏱️ **Execution Times**: Real-time tool performance feedback
+- 🛠️ **Professional UI**: Clean display of intelligence operations
+
+### **Without ACI.dev (Still Great!):**
+- All core gameplay features work perfectly
+- Realistic mock intelligence for seamless development
+- Easy upgrade path to real tools anytime
+
+## 🏗️ Architecture
+
+### Modular Design
+```
+src/
+├── types/           # TypeScript interfaces + ACI tool definitions
+├── services/        # Core services (OpenAI, TTS, ACI tool calling)
+├── engine/          # Game engine and orchestration
+├── config/          # Game mode configurations
+└── server.ts        # Express API server
+```
+
+### Key Components
+- **GameEngine**: Orchestrates the entire game flow
+- **OpenAIService**: Enhanced with ACI tool calling for advisor intelligence
+- **ACIService**: Manages real-world tool calling and intelligence gathering
+- **TTSService**: Professional voice synthesis with AI-Coustics enhancement
+- **WorldStateManager**: Tracks and updates game parameters with bounds checking
+- **Enhanced Advisor System**: 5 specialized advisors with real research capabilities
+
+## 🔮 Future Roadmap
+
+### Step 2: Voice Integration
+- **ElevenLabs**: Convert advisor text to realistic speech
+- **ai|coustics**: Enhance audio quality and add character effects
+
+### Step 3: Advanced Features
+- **ACI.dev**: Tool calling engine for complex interactions
+- **Weaviate**: Vector database for advisor profiles and event histories
+- **New Game Modes**: Corporate boardroom, space station, etc.
+
+## 📡 API Endpoints
+
+- `POST /api/game/start` - Start new game session
+- `GET /api/game/state` - Get current game state
+- `POST /api/game/decision` - Make a decision
+- `POST /api/game/ask-advisor` - Ask advisor a question
+- `GET /api/game/analytics` - Get game analytics
+- `POST /api/game/end` - End current session
+
+## 🧠 AI Integration
+
+### OpenAI Prompts
+The system uses sophisticated prompts to:
+- Generate realistic events based on world state
+- Create advisor personalities with hidden motivations
+- Evaluate decision consequences using butterfly effect principles
+- Handle follow-up questions contextually
+
+### Advisor Trustworthiness
+- **High Trust (0.8-1.0)**: Sarah Mitchell, Dr. Harrison, Dr. Patel, Dr. Foster
+- **Medium Trust (0.6-0.8)**: Dr. Rodriguez, General Stone
+- **Low Trust (0.5-0.6)**: David Chen, Alex Thompson
+
+## 🛠️ Development
+
+### Scripts
+- `npm run dev` - Development server with hot reload
+- `npm run build` - Build TypeScript to JavaScript
+- `npm start` - Run production server
+- `npm test` - Run tests (placeholder)
+
+### Environment Variables
+- `OPENAI_API_KEY` - Your OpenAI API key (required)
+- `PORT` - Server port (default: 3000)
+- `GAME_MODE` - Game mode (default: oval_office)
+
+## 📄 License
+
+MIT License - Feel free to modify and extend!
+
+## 🎯 Hackathon Ready
+
+This project is designed for rapid iteration and demo-ready functionality:
+- ✅ Working MVP with OpenAI integration
+- ✅ Web interface for immediate testing
+- ✅ Modular architecture for easy expansion
+- ✅ Clear roadmap for voice and advanced features
+- ✅ Comprehensive documentation
+
+Ready to deploy and demonstrate! 🚀

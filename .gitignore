@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.env
+*.log
+.DS_Store
+
+# Generated audio files
+public/audio/*.mp3
+public/audio/*.wav
+public/audio/*.ogg
+
+# Python virtual environment
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.vscode/settings.json
