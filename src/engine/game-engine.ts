@@ -14,15 +14,16 @@ export class GameEngine {
   private readonly recentAdvisorResponses: Map<string, string[]> = new Map(); // Track recent responses per advisor
   private readonly recentlySelectedAdvisors: string[] = []; // Track recently selected advisor IDs
 
-  constructor(openAIApiKey: string, config: GameConfig, aiAcousticsApiKey?: string) {
+  constructor(openAIApiKey: string, config: GameConfig, aiAcousticsApiKey?: string, elevenlabsApiKey?: string) {
     console.log('🎮 [GameEngine] Initializing game engine...');
     console.log('🎮 [GameEngine] OpenAI API Key provided:', openAIApiKey ? 'YES' : 'NO');
     console.log('🎮 [GameEngine] AI Acoustics API Key provided:', aiAcousticsApiKey ? 'YES' : 'NO');
+    console.log('🎮 [GameEngine] ElevenLabs API Key provided:', elevenlabsApiKey ? 'YES' : 'NO');
     console.log('🎮 [GameEngine] Config mode:', config.mode);
     console.log('🎮 [GameEngine] Advisors count:', config.advisors.length);
     console.log('🎮 [GameEngine] Initial world state:', config.initialWorldState);
     
-    this.openAI = new OpenAIService(openAIApiKey, aiAcousticsApiKey);
+    this.openAI = new OpenAIService(openAIApiKey, aiAcousticsApiKey, elevenlabsApiKey);
     this.worldStateManager = new WorldStateManager(config.initialWorldState);
     this.config = config;
     

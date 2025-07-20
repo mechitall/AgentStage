@@ -21,9 +21,11 @@ function initializeGameEngine(): GameEngine {
   console.log('🔧 [Server] Initializing game engine...');
   const apiKey = process.env.OPENAI_API_KEY;
   const aiAcousticsKey = process.env.AI_ACOUSTICS_API_KEY;
+  const elevenlabsKey = process.env.ELEVENLABS_API_KEY;
   console.log('🔧 [Server] Environment variables loaded:', {
     OPENAI_API_KEY: apiKey ? `${apiKey.slice(0, 10)}...${apiKey.slice(-4)}` : 'NOT SET',
     AI_ACOUSTICS_API_KEY: aiAcousticsKey ? 'SET' : 'NOT SET',
+    ELEVENLABS_API_KEY: elevenlabsKey ? 'SET' : 'NOT SET',
     PORT: process.env.PORT || 'default',
     GAME_MODE: process.env.GAME_MODE || 'default'
   });
@@ -34,7 +36,7 @@ function initializeGameEngine(): GameEngine {
   }
   
   console.log('🔧 [Server] Creating GameEngine with OVAL_OFFICE_CONFIG...');
-  const engine = new GameEngine(apiKey, OVAL_OFFICE_CONFIG, aiAcousticsKey);
+  const engine = new GameEngine(apiKey, OVAL_OFFICE_CONFIG, aiAcousticsKey, elevenlabsKey);
   console.log('🔧 [Server] GameEngine created successfully');
   return engine;
 }

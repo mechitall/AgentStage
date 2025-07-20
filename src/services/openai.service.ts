@@ -9,23 +9,26 @@ export class OpenAIService {
   private readonly ttsService?: TTSService;
   private readonly aciService: ACIService;
 
-  constructor(apiKey: string, aiAcousticsApiKey?: string) {
+  constructor(apiKey: string, aiAcousticsApiKey?: string, elevenlabsApiKey?: string) {
     console.log('🤖 [OpenAI] Initializing OpenAI service...');
     console.log('🤖 [OpenAI] API Key provided:', apiKey ? `${apiKey.slice(0, 10)}...${apiKey.slice(-4)}` : 'NOT PROVIDED');
+    console.log('🤖 [OpenAI] ElevenLabs API Key provided:', elevenlabsApiKey ? 'YES' : 'NO');
     this.client = new OpenAI({ apiKey });
     this.aciService = new ACIService();
     
-    // Initialize TTS service if we have API keys
-    if (apiKey) {
+    // Initialize TTS service if we have ElevenLabs API key
+    if (elevenlabsApiKey) {
       try {
         this.ttsService = new TTSService({
-          openaiApiKey: apiKey,
+          elevenlabsApiKey: elevenlabsApiKey,
           aiAcousticsApiKey
         });
-        console.log('🎤 [OpenAI] TTS service initialized');
+        console.log('🎤 [OpenAI] ElevenLabs TTS service initialized');
       } catch (error) {
-        console.warn('⚠️ [OpenAI] TTS service initialization failed:', error);
+        console.warn('⚠️ [OpenAI] ElevenLabs TTS service initialization failed:', error);
       }
+    } else {
+      console.warn('⚠️ [OpenAI] No ElevenLabs API key provided, TTS disabled');
     }
     
     console.log('🤖 [OpenAI] OpenAI client initialized successfully');
@@ -379,10 +382,8 @@ Keep the description SHORT and URGENT - no more than 2 sentences. Get straight t
       if (this.ttsService && (eventData.urgency === 'high' || eventData.urgency === 'critical')) {
         try {
           console.log(`🎤 [OpenAI] Generating TTS for urgent briefing: ${event.title}`);
-          const audioUrl = await this.ttsService.generateAdvisorSpeech(
-            'urgent_briefing', 
-            eventData.description, 
-            'News Anchor'
+          const audioUrl = await this.ttsService.generateUrgentBriefing(
+            eventData.description
           );
           event.audioUrl = audioUrl;
           console.log(`🎤 [OpenAI] TTS generated for urgent briefing: ${audioUrl}`);
