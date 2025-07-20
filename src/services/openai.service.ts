@@ -1049,4 +1049,82 @@ Respond with a JSON object containing:
         };
     }
   }
+
+  /**
+   * Generate news script for Beyond video generation
+   */
+  async generateNewsScript(context: {
+    event: GameEvent;
+    worldState: WorldState;
+    decision?: any;
+    consequence?: any;
+    sessionTurn: number;
+  }): Promise<string | null> {
+    const { event, worldState, decision, consequence, sessionTurn } = context;
+
+    let prompt = `You are a professional TV news anchor reporting on breaking presidential news. Create a concise, 10-second news script (approximately 25-30 words) based on the following situation:
+
+EVENT: ${event.title}
+DESCRIPTION: ${event.description}
+URGENCY: ${event.urgency}
+TURN: ${sessionTurn}
+
+CURRENT WORLD STATE:
+- Economy: ${worldState.economy}/100
+- Public Trust: ${worldState.publicTrust}/100
+- Global Reputation: ${worldState.globalReputation}/100
+- Domestic Stability: ${worldState.domesticStability}/100`;
+
+    if (decision && consequence) {
+      prompt += `
+
+PRESIDENTIAL DECISION: ${decision.action}
+CONSEQUENCES: ${consequence.impact?.summary || 'Decision consequences pending'}`;
+    }
+
+    prompt += `
+
+Write a professional, urgent news script that:
+1. Sounds like a real TV news anchor
+2. Fits exactly in 10 seconds (25-30 words maximum)
+3. Captures the gravity of the situation
+4. Uses appropriate urgency based on the event level
+5. Mentions "President" or "White House" for context
+
+Examples of good 10-second scripts:
+- "Breaking: President announces emergency economic measures as markets tumble. Congressional leaders call for immediate action."
+- "White House sources confirm military deployment amid rising global tensions. International allies express growing concerns."
+- "Crisis unfolds as Presidential decision sparks nationwide protests. Emergency cabinet meeting scheduled within the hour."
+
+Return ONLY the news script, nothing else:`;
+
+    try {
+      const response = await this.client.chat.completions.create({
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 100,
+        temperature: 0.7,
+      });
+
+      const script = response.choices[0]?.message?.content?.trim();
+      
+      if (!script) {
+        console.error('🤖 [OpenAI] Empty script generated');
+        return null;
+      }
+
+      // Validate script length (should be ~25-30 words for 10 seconds)
+      const wordCount = script.split(' ').length;
+      if (wordCount > 40) {
+        console.warn(`🤖 [OpenAI] Script too long (${wordCount} words), truncating...`);
+        return script.split(' ').slice(0, 30).join(' ') + '.';
+      }
+
+      console.log(`🤖 [OpenAI] Generated news script (${wordCount} words): ${script}`);
+      return script;
+    } catch (error) {
+      console.error('🤖 [OpenAI] Error generating news script:', error);
+      return null;
+    }
+  }
 }

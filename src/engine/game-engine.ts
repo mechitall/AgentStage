@@ -1,11 +1,13 @@
 import { GameEvent, WorldState, AdvisorMessage, PlayerDecision, GameSession, GameConfig } from '../types';
 import { OpenAIService } from '../services/openai.service';
 import { WorldStateManager } from '../services/world-state.service';
+import { NewsReporterService } from '../services/news-reporter.service';
 import { CASCADE_PROBABILITY_MATRIX } from '../config/oval-office.config';
 
 export class GameEngine {
   private readonly openAI: OpenAIService;
   private readonly worldStateManager: WorldStateManager;
+  private readonly newsReporter: NewsReporterService;
   private currentSession: GameSession | null = null;
   private readonly config: GameConfig;
   private readonly eventHistory: GameEvent[] = [];
@@ -25,9 +27,11 @@ export class GameEngine {
     
     this.openAI = new OpenAIService(openAIApiKey, aiAcousticsApiKey, elevenlabsApiKey);
     this.worldStateManager = new WorldStateManager(config.initialWorldState);
+    this.newsReporter = new NewsReporterService(this.openAI);
     this.config = config;
     
     console.log('🎮 [GameEngine] Game engine initialized successfully');
+    console.log('📺 [GameEngine] News reporter service status:', this.newsReporter.getStatus());
   }
 
   /**
@@ -66,6 +70,16 @@ export class GameEngine {
       const initialResponses = await this.getAdvisorResponses(initialEvent);
       this.currentEventMessages = [...initialResponses]; // Cache initial responses
       console.log('🚀 [GameEngine] Advisor responses received and cached');
+
+      // Queue news report for initial event
+      if (this.newsReporter.isReady()) {
+        console.log('📺 [GameEngine] Queuing news report for initial event...');
+        this.newsReporter.queueNewsReport({
+          event: initialEvent,
+          worldState: this.worldStateManager.getCurrentState(),
+          sessionTurn: this.currentSession.currentTurn
+        });
+      }
 
       console.log('🚀 [GameEngine] Session started successfully');
     } catch (error) {
@@ -501,6 +515,16 @@ export class GameEngine {
         if (nextEvent) {
           console.log('🔍 [GameEngine] Advisor messages for new event:', this.advisorMessages.filter(m => m.eventId === nextEvent!.id).length);
         }
+
+        // Queue news report for new event
+        if (this.newsReporter.isReady() && nextEvent) {
+          console.log('📺 [GameEngine] Queuing news report for new event...');
+          this.newsReporter.queueNewsReport({
+            event: nextEvent,
+            worldState: newWorldState,
+            sessionTurn: this.currentSession.currentTurn
+          });
+        }
       } catch (error) {
         console.error('❌ [GameEngine] ERROR generating advisor responses for new event:', error);
         console.error('❌ [GameEngine] Error stack:', error instanceof Error ? error.stack : 'No stack trace');
@@ -510,6 +534,26 @@ export class GameEngine {
     } else {
       console.log('📅 [GameEngine] ❌ NOT generating new event - conditions not met');
       console.log('📅 [GameEngine] This means same advisors/responses will be shown!');
+    }
+
+    // Queue news report for decision outcome
+    if (this.newsReporter.isReady()) {
+      console.log('📺 [GameEngine] Queuing news report for decision outcome...');
+      this.newsReporter.queueNewsReport({
+        event,
+        decision: {
+          eventId,
+          action,
+          reasoning,
+          consultedAdvisors: this.advisorMessages
+            .filter(m => m.eventId === eventId)
+            .map(m => m.advisorId),
+          timestamp: new Date(),
+        },
+        consequence,
+        worldState: newWorldState,
+        sessionTurn: this.currentSession.currentTurn
+      });
     }
 
     return {
@@ -727,6 +771,31 @@ export class GameEngine {
     return Math.random() < Math.min(0.65, finalChance); // Reduced max from 90% to 65%
     */
   }  /**
+   * Get news videos for a session
+   */
+  getNewsVideos(sessionId?: string): any[] {
+    if (!this.newsReporter.isReady()) {
+      console.log('📺 [GameEngine] News reporter not ready, returning empty array');
+      return [];
+    }
+
+    // If sessionId is provided, validate it matches current session
+    if (sessionId && this.currentSession && this.currentSession.sessionId !== sessionId) {
+      console.log(`📺 [GameEngine] Session mismatch: ${sessionId} vs ${this.currentSession.sessionId}`);
+      return [];
+    }
+
+    if (!this.currentSession) {
+      console.log('📺 [GameEngine] No active session');
+      return [];
+    }
+
+    const videos = this.newsReporter.getCompletedVideos();
+    console.log(`📺 [GameEngine] Returning ${videos.length} completed news videos`);
+    return videos;
+  }
+
+  /**
    * End the current session
    */
   endSession(): GameSession | null {

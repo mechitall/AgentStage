@@ -596,6 +596,179 @@
                 transform: rotate(360deg);
             }
         }
+        /* News Panel Styles */
+        .news-panel {
+            width: 320px;
+            background: #1e2124;
+            border-left: 1px solid #3a4955;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 100;
+        }
+
+        .news-panel.active {
+            transform: translateX(0);
+        }
+
+        .news-header {
+            padding: 20px;
+            background: #2d3843;
+            border-bottom: 1px solid #3a4955;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .news-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: #ffffff;
+        }
+
+        .news-toggle {
+            background: transparent;
+            border: none;
+            color: #8ea6b4;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .news-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .news-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .news-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: #8ea6b4;
+            text-align: center;
+        }
+
+        .news-placeholder-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .news-icon {
+            font-size: 32px;
+            opacity: 0.5;
+        }
+
+        .news-item {
+            background: #36393f;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #3a4955;
+        }
+
+        .news-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .news-item-time {
+            font-size: 12px;
+            color: #8ea6b4;
+        }
+
+        .news-item-urgency {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .news-urgency-low {
+            background: rgba(67, 181, 129, 0.2);
+            color: #43b581;
+        }
+
+        .news-urgency-medium {
+            background: rgba(250, 166, 26, 0.2);
+            color: #faa61a;
+        }
+
+        .news-urgency-high {
+            background: rgba(240, 71, 71, 0.2);
+            color: #f04747;
+        }
+
+        .news-urgency-critical {
+            background: rgba(173, 20, 87, 0.2);
+            color: #ad1457;
+        }
+
+        .news-image {
+            width: 100%;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            background: #000;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .news-image:hover {
+            transform: scale(1.02);
+        }
+
+        .news-script {
+            font-size: 14px;
+            line-height: 1.4;
+            color: #dcddde;
+            margin-bottom: 8px;
+        }
+
+        .news-dot {
+            color: #f04747;
+            font-size: 12px;
+            margin-left: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .news-panel {
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .news-panel {
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: 100vw;
+                z-index: 1000;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -703,6 +876,22 @@
                     <div class="status-mini">
                         <span>Global</span>
                         <span class="status-mini-value status-neutral" id="global-mini">60</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Panel -->
+        <div class="news-panel" id="news-panel">
+            <div class="news-header">
+                <div class="news-title">📺 Breaking News</div>
+                <button class="news-toggle" onclick="toggleNewsPanel()">×</button>
+            </div>
+            <div class="news-content">
+                <div class="news-placeholder">
+                    <div class="news-placeholder-text">
+                        <span class="news-icon">📺</span>
+                        News updates will appear here as events unfold
                     </div>
                 </div>
             </div>

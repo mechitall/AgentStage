@@ -238,6 +238,34 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+/**
+ * Get news videos for a session
+ */
+app.get('/api/game/news/:sessionId', async (req, res) => {
+  console.log('📺 [API] GET /api/game/news called');
+  
+  try {
+    const sessionId = req.params.sessionId;
+    console.log('📺 [API] Getting news for session:', sessionId);
+    
+    if (!gameEngine) {
+      console.log('📺 [API] ERROR: Game engine not initialized');
+      return res.status(400).json({ error: 'Game engine not initialized' });
+    }
+    
+    const newsVideos = gameEngine.getNewsVideos(sessionId);
+    console.log(`📺 [API] Found ${newsVideos.length} news videos`);
+    
+    res.json({ 
+      news: newsVideos,
+      count: newsVideos.length 
+    });
+  } catch (error) {
+    console.error('📺 [API] Error getting news videos:', error);
+    res.status(500).json({ error: 'Failed to get news videos' });
+  }
+});
+
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Unhandled error:', err);

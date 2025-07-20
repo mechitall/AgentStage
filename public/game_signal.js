@@ -566,3 +566,146 @@ window.playAudio = playAudio;
 window.addMessage = addMessage;
 window.updateWorldStatusMini = updateWorldStatusMini;
 window.updateNotificationBadge = updateNotificationBadge;
+
+// News panel functionality
+let newsImages = [];
+let newsCheckInterval = null;
+
+function toggleNewsPanel() {
+    const newsPanel = document.getElementById('news-panel');
+    if (newsPanel) {
+        newsPanel.classList.toggle('active');
+        
+        // Start checking for news if panel is opened
+        if (newsPanel.classList.contains('active') && !newsCheckInterval) {
+            startNewsPolling();
+        }
+    }
+}
+
+function startNewsPolling() {
+    if (newsCheckInterval) {
+        clearInterval(newsCheckInterval);
+    }
+    
+    // Check for new news videos every 30 seconds
+    newsCheckInterval = setInterval(() => {
+        if (gameSession) {
+            fetchLatestNews();
+        }
+    }, 30000);
+    
+    // Initial fetch
+    if (gameSession) {
+        fetchLatestNews();
+    }
+}
+
+async function fetchLatestNews() {
+    try {
+        const response = await fetch(`/api/game/news/${gameSession}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            if (data.news && data.news.length > 0) {
+                updateNewsPanel(data.news);
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching news:', error);
+    }
+}
+
+function updateNewsPanel(news) {
+    const newsContent = document.querySelector('.news-content');
+    if (!newsContent) return;
+    
+    // Remove placeholder if it exists
+    const placeholder = newsContent.querySelector('.news-placeholder');
+    if (placeholder) {
+        placeholder.remove();
+    }
+    
+    // Add new news items (only show new ones)
+    news.forEach(newsItem => {
+        if (!newsImages.find(img => img.id === newsItem.id)) {
+            newsImages.push(newsItem);
+            addNewsItem(newsItem);
+            
+            // Show notification dot if panel is not active
+            const newsPanel = document.getElementById('news-panel');
+            if (!newsPanel.classList.contains('active')) {
+                showNewsNotification();
+            }
+        }
+    });
+}
+
+function addNewsItem(newsItem) {
+    const newsContent = document.querySelector('.news-content');
+    if (!newsContent) return;
+    
+    const newsElement = document.createElement('div');
+    newsElement.className = 'news-item';
+    newsElement.innerHTML = `
+        <div class="news-item-header">
+            <span class="news-item-time">${formatNewsTime(newsItem.timestamp)}</span>
+            <span class="news-item-urgency news-urgency-${newsItem.urgency}">${newsItem.urgency}</span>
+        </div>
+        ${newsItem.imageUrl ? `<img class="news-image" src="${newsItem.imageUrl}" alt="News Image" onclick="openNewsImage('${newsItem.imageUrl}')">` : ''}
+        <div class="news-script">${newsItem.script}</div>
+    `;
+    
+    // Insert at the top
+    newsContent.insertBefore(newsElement, newsContent.firstChild);
+}
+
+function formatNewsTime(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
+    return date.toLocaleDateString();
+}
+
+function showNewsNotification() {
+    // Add a subtle notification indicator
+    const newsTitle = document.querySelector('.news-title');
+    if (newsTitle && !newsTitle.classList.contains('has-notification')) {
+        newsTitle.classList.add('has-notification');
+        newsTitle.innerHTML = '📺 Breaking News <span class="news-dot">●</span>';
+    }
+}
+
+function openNewsImage(imageUrl) {
+    // Open image in a new window/tab for larger viewing
+    window.open(imageUrl, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+}
+
+// Export news functions
+window.toggleNewsPanel = toggleNewsPanel;
+window.openNewsImage = openNewsImage;
+
+// Auto-start news polling when game starts
+const originalStartGame = startGame;
+window.startGame = async function() {
+    await originalStartGame();
+    
+    // Auto-open news panel
+    setTimeout(() => {
+        const newsPanel = document.getElementById('news-panel');
+        if (newsPanel) {
+            newsPanel.classList.add('active');
+            startNewsPolling();
+        }
+    }, 2000);
+};
