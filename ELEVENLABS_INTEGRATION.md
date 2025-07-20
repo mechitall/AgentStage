@@ -7,20 +7,26 @@ Agent Stage now uses **ElevenLabs** for professional, high-quality text-to-speec
 ## 🎯 **Features Implemented**
 
 ### **Individual Advisor Voices**
-Each advisor has been carefully mapped to a specific ElevenLabs voice that matches their personality:
+Each advisor has been carefully mapped to a specific ElevenLabs voice that matches their personality AND gender:
 
-- **DJ Vans** (Chief of Staff) → **Adam** (`pNInz6obpgDQGcFmaJgB`)
-  - Energetic, fast-talking political operative
+**MALE ADVISORS:**
+- **DJ Vans** (Chief of Staff) → **Josh** (`ErXwobaYiN019PkySvjV`)
+  - Young, energetic political operative (JD Vance-inspired)
   - Settings: Low stability (0.4), moderate similarity (0.6), high style (0.8)
 
 - **General Jake Sullivan-Peters** → **Antoni** (`Zlb1dXrM653N07WRdFW3`) 
   - Deep, authoritative military voice
   - Settings: High stability (0.8), high similarity (0.9), low style (0.1)
 
-- **Ilon Tusk** (Tech Advisor) → **Bella** (`EXAVITQu4vr4xnSDxMaL`)
-  - Quirky, distinctive tech entrepreneur voice
+- **Ilon Tusk** (Tech Advisor) → **Michael** (`flq6f7yk4E4fJM5XTYuZ`)
+  - Eccentric, distinctive tech entrepreneur voice (Elon Musk-inspired)
   - Settings: Very low stability (0.3), moderate similarity (0.7), very high style (0.9)
 
+- **Dr. Anthony Birx-Fauci** (Healthcare) → **Bill** (`pqHfZKP75CvOlQylNhV4`)
+  - Authoritative medical expert voice
+  - Settings: Very high stability (0.9), very high similarity (0.9), very low style (0.1)
+
+**FEMALE ADVISORS:**
 - **Kellyanne Conway-Smith** → **Elli** (`MF3mGyEYCl7XYWbV9V6O`)
   - Professional female political voice
   - Settings: Moderate stability (0.6), high similarity (0.8), moderate style (0.5)
@@ -28,10 +34,6 @@ Each advisor has been carefully mapped to a specific ElevenLabs voice that match
 - **Dr. Janet Powell-Summers** (Economic) → **Emily** (`LcfcDJNUP1GQjkzn1xUU`)
   - Sophisticated, academic economist voice
   - Settings: High stability (0.7), very high similarity (0.9), low style (0.2)
-
-- **Dr. Anthony Birx-Fauci** (Healthcare) → **Bill** (`pqHfZKP75CvOlQylNhV4`)
-  - Authoritative medical expert voice
-  - Settings: Very high stability (0.9), very high similarity (0.9), very low style (0.1)
 
 - **Alexandria Green-Cortez** (Environmental) → **Rachel** (`21m00Tcm4TlvDq8ikWAM`)
   - Passionate young female activist voice
@@ -110,14 +112,14 @@ The voice selection was carefully chosen to match each advisor's character:
 
 | Advisor | Personality | Voice Choice | Reasoning |
 |---------|-------------|--------------|-----------|
-| DJ Vans | Energetic political operative | Adam - Young, dynamic | Matches social media savvy personality |
-| General | Military authority | Antoni - Deep, commanding | Perfect for defense expertise |
-| Ilon Tusk | Tech eccentric | Bella - Quirky, distinctive | Captures entrepreneurial energy |
-| Kellyanne | Political strategist | Elli - Professional female | Polished political communication |
-| Dr. Janet | Academic economist | Emily - Sophisticated | Intellectual, analytical tone |
-| Dr. Anthony | Medical authority | Bill - Clinical, trusted | Authoritative healthcare expert |
-| Alexandria | Environmental activist | Rachel - Passionate youth | Captures activist energy |
-| Director Sarah | Intelligence operative | Domi - Mysterious | Secretive, professional spy voice |
+| DJ Vans | Energetic political operative (male) | Josh - Young, dynamic male | Matches JD Vance-inspired character with appropriate gender |
+| General | Military authority (male) | Antoni - Deep, commanding male | Perfect for defense expertise with masculine authority |
+| Ilon Tusk | Tech eccentric (male) | Michael - Eccentric male | Captures Elon Musk entrepreneurial energy with correct gender |
+| Kellyanne | Political strategist (female) | Elli - Professional female | Polished political communication |
+| Dr. Janet | Academic economist (female) | Emily - Sophisticated female | Intellectual, analytical tone |
+| Dr. Anthony | Medical authority (male) | Bill - Clinical, trusted male | Authoritative healthcare expert |
+| Alexandria | Environmental activist (female) | Rachel - Passionate female | Captures activist energy |
+| Director Sarah | Intelligence operative (female) | Domi - Mysterious female | Secretive, professional spy voice |
 
 ## 🔍 **Monitoring & Logs**
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agent Stage - The Oval Office</title>
+    <title>Agent Stage - Presidential Communications</title>
     <style>
         * {
             margin: 0;
@@ -12,533 +12,940 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0e1419;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #1b1d21;
             color: #ffffff;
             height: 100vh;
             overflow: hidden;
         }
 
-        /* Signal-style layout */
-        .chat-container {
+        /* Main Signal-like layout */
+        .app-container {
             display: flex;
             height: 100vh;
         }
 
-        /* Left sidebar */
+        /* Left Sidebar - Signal style */
         .sidebar {
-            width: 320px;
-            background: #1b2329;
-            border-right: 1px solid #2d3843;
+            width: 350px;
+            background: #2d3843;
             display: flex;
             flex-direction: column;
+            border-right: 1px solid #3a4955;
         }
 
-        .sidebar-header {
+        /* Profile section at top */
+        .profile-section {
             padding: 20px;
-            border-bottom: 1px solid #2d3843;
+            background: #2d3843;
+            border-bottom: 1px solid #3a4955;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .sidebar-header h1 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 8px;
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            color: white;
         }
 
-        .sidebar-header p {
-            font-size: 14px;
-            color: #8696a0;
-        }
-
-        .world-status {
+        .profile-info {
             flex: 1;
-            padding: 20px;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .profile-status {
+            font-size: 13px;
+            color: #8ea6b4;
+        }
+
+        .profile-settings {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            color: #8ea6b4;
+            transition: background 0.2s;
+        }
+
+        .profile-settings:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Chat list section */
+        .chat-list {
+            flex: 1;
             overflow-y: auto;
         }
 
-        .status-item {
+        .chat-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(58, 73, 85, 0.3);
+            cursor: pointer;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .chat-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .chat-item.active {
+            background: #1a73e8;
+        }
+
+        .chat-item.active:hover {
+            background: #1557b0;
+        }
+
+        .chat-header-info {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(45, 56, 67, 0.3);
+            gap: 12px;
+            margin-bottom: 6px;
         }
 
-        .status-label {
-            font-size: 13px;
-            color: #8696a0;
+        .chat-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
         }
 
-        .status-value {
-            font-size: 13px;
-            font-weight: 500;
+        .oval-office-avatar {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+
+        .coming-soon-avatar {
+            background: linear-gradient(135deg, #8b9dc3 0%, #667eea 100%);
+        }
+
+        .chat-meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-preview {
+            font-size: 14px;
+            color: #8ea6b4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-time {
+            font-size: 12px;
+            color: #8ea6b4;
+            margin-left: 8px;
+            flex-shrink: 0;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .coming-soon-badge {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            background: #667eea;
+            color: white;
+            border-radius: 10px;
             padding: 2px 8px;
-            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
         }
-
-        .status-critical { background: #dc3545; color: white; }
-        .status-warning { background: #ffc107; color: #000; }
-        .status-good { background: #28a745; color: white; }
-        .status-neutral { background: #495057; color: white; }
 
         /* Main chat area */
         .chat-main {
             flex: 1;
             display: flex;
             flex-direction: column;
+            background: #1b1d21;
         }
 
-        /* Chat header */
+        /* Welcome screen for non-active chats */
+        .welcome-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            background: #1b1d21;
+        }
+
+        .welcome-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin-bottom: 24px;
+        }
+
+        .welcome-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            color: #8ea6b4;
+            margin-bottom: 32px;
+            max-width: 400px;
+            line-height: 1.4;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Chat area when active */
         .chat-header {
-            background: #202c33;
+            background: #2d3843;
             padding: 16px 24px;
-            border-bottom: 1px solid #2d3843;
+            border-bottom: 1px solid #3a4955;
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .event-indicator {
-            width: 8px;
-            height: 8px;
+        .chat-header-avatar {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: #ff6b6b;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 16px;
         }
 
-        .event-info h2 {
-            font-size: 16px;
-            font-weight: 500;
+        .chat-header-info h2 {
+            font-size: 18px;
+            font-weight: 600;
             margin-bottom: 2px;
         }
 
-        .event-urgency {
-            font-size: 12px;
-            color: #8696a0;
+        .chat-header-status {
+            font-size: 13px;
+            color: #8ea6b4;
+        }
+
+        .urgency-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-left: auto;
+        }
+
+        .urgency-critical {
+            background: #ff6b6b;
+            animation: pulse 2s infinite;
+        }
+
+        .urgency-high {
+            background: #ffa726;
+        }
+
+        .urgency-medium {
+            background: #ffeb3b;
+        }
+
+        .urgency-low {
+            background: #4caf50;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
 
         /* Messages area */
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 20px 24px;
-            background: #0e1419;
+            padding: 20px;
+            background: #1b1d21;
         }
 
         .message {
-            margin-bottom: 12px;
-            max-width: 70%;
-        }
-
-        .message.system {
-            max-width: 100%;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .system-message {
-            background: rgba(134, 150, 160, 0.1);
-            color: #8696a0;
-            padding: 8px 16px;
-            border-radius: 16px;
-            display: inline-block;
-            font-size: 13px;
-        }
-
-        .consequence-message {
-            background: rgba(0, 168, 132, 0.1);
-            color: #00a884;
-            padding: 12px 16px;
-            max-width: 80%;
-        }
-
-        .consequence-content {
-            margin-top: 8px;
-            line-height: 1.5;
-        }
-
-        .message.advisor {
-            margin-left: 0;
-        }
-
-        .message-header {
+            margin-bottom: 16px;
             display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
+            align-items: flex-start;
+            gap: 12px;
         }
 
-        .advisor-avatar {
-            width: 24px;
-            height: 24px;
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
-            font-weight: 600;
+            font-weight: bold;
             color: white;
+            font-size: 14px;
+            flex-shrink: 0;
         }
 
-        .avatar-defense { background: #dc3545; }
-        .avatar-treasury { background: #28a745; }
-        .avatar-staff { background: #6f42c1; }
+        .system-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
 
-        .advisor-name {
+        .advisor-avatar {
+            background: linear-gradient(135deg, #26a69a 0%, #00acc1 100%);
+        }
+
+        .user-avatar {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+
+        .message-content {
+            max-width: 70%;
+            background: #2d3843;
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+        }
+
+        .message.system .message-content {
+            background: rgba(134, 150, 160, 0.1);
+            text-align: center;
+            font-style: italic;
+        }
+
+        .message-sender {
             font-size: 12px;
-            font-weight: 500;
-            color: #8696a0;
+            font-weight: 600;
+            color: #8ea6b4;
+            margin-bottom: 4px;
+        }
+
+        .message-text {
+            font-size: 15px;
+            line-height: 1.6;
+            word-wrap: break-word;
+            white-space: pre-line; /* Preserves line breaks */
+        }
+
+        /* Better formatting for system messages */
+        .message.system .message-text {
+            line-height: 1.7;
+        }
+
+        /* Improved formatting for decision impacts */
+        .message.system .message-text strong {
+            color: #ffffff;
+            font-weight: 600;
         }
 
         .message-time {
             font-size: 11px;
-            color: #5c6a75;
-            margin-left: auto;
+            color: #8ea6b4;
+            margin-top: 4px;
         }
 
-        .message-content {
-            background: #1f2c33;
-            padding: 12px 16px;
-            border-radius: 16px;
-            font-size: 14px;
-            line-height: 1.5;
-            border-top-left-radius: 4px;
+        .message.user .message-time {
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        .message.user {
-            margin-left: auto;
-        }
-
-        .message.user .message-content {
-            background: #005c4b;
-            border-top-right-radius: 4px;
-            border-top-left-radius: 16px;
-        }
-
-        /* TTS Audio Controls */
-        .audio-controls {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .play-audio-btn {
-            background: #25d366;
-            color: white;
+        .play-button {
+            background: rgba(255, 255, 255, 0.1);
             border: none;
-            border-radius: 12px;
+            color: white;
             padding: 6px 12px;
+            border-radius: 12px;
             font-size: 12px;
             cursor: pointer;
+            margin-top: 8px;
             transition: background 0.2s;
         }
 
-        .play-audio-btn:hover {
-            background: #1eb854;
-        }
-
-        .play-audio-btn:disabled {
-            background: #666;
-            cursor: not-allowed;
-        }
-
-        .audio-status {
-            margin-left: 8px;
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        .audio-status .loading {
-            color: #ffa500;
-        }
-
-        .audio-status .playing {
-            color: #25d366;
-        }
-
-        .audio-status .error {
-            color: #ff4444;
+        .play-button:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         /* Input area */
         .input-area {
-            background: #202c33;
+            background: #2d3843;
             padding: 16px 24px;
-            border-top: 1px solid #2d3843;
-        }
-
-        .input-container {
-            background: #2a3942;
-            border-radius: 24px;
-            padding: 8px 16px;
+            border-top: 1px solid #3a4955;
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .decision-input {
+        .input-field {
             flex: 1;
-            background: transparent;
-            border: none;
+            background: #1b1d21;
+            border: 1px solid #3a4955;
+            border-radius: 20px;
+            padding: 12px 16px;
             color: white;
-            font-size: 14px;
-            outline: none;
-            min-height: 20px;
+            font-size: 15px;
             resize: none;
-            font-family: inherit;
+            max-height: 120px;
+            min-height: 44px;
         }
 
-        .decision-input::placeholder {
-            color: #8696a0;
+        .input-field:focus {
+            outline: none;
+            border-color: #1a73e8;
+        }
+
+        .input-field::placeholder {
+            color: #8ea6b4;
         }
 
         .send-button {
-            background: #00a884;
+            background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
             border: none;
+            color: white;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            width: 32px;
-            height: 32px;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: background 0.2s;
+            transition: transform 0.2s;
+            font-size: 18px;
         }
 
         .send-button:hover {
-            background: #009970;
+            transform: scale(1.05);
         }
 
         .send-button:disabled {
-            background: #4a5a68;
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
 
-        /* Start screen overlay */
-        .start-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(14, 20, 25, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .start-card {
-            background: #1f2c33;
-            padding: 40px;
-            border-radius: 16px;
-            text-align: center;
-            max-width: 400px;
-        }
-
-        .start-card h1 {
-            font-size: 24px;
-            margin-bottom: 12px;
-        }
-
-        .start-card p {
-            color: #8696a0;
-            margin-bottom: 32px;
-            line-height: 1.5;
-        }
-
-        .start-button {
-            background: #00a884;
-            color: white;
-            border: none;
-            padding: 12px 32px;
-            border-radius: 24px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .start-button:hover:not(:disabled) {
-            background: #009970;
-        }
-
-        .start-button:disabled {
-            background: #4a5a68;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        .hidden {
+        /* Hidden by default */
+        .chat-header,
+        .messages,
+        .input-area {
             display: none;
         }
 
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 6px;
+        /* Show when active */
+        .chat-main.active .welcome-screen {
+            display: none;
         }
 
-        ::-webkit-scrollbar-track {
-            background: transparent;
+        .chat-main.active .chat-header,
+        .chat-main.active .messages,
+        .chat-main.active .input-area {
+            display: flex;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: rgba(134, 150, 160, 0.3);
-            border-radius: 3px;
+        .chat-main.active .messages {
+            display: block;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(134, 150, 160, 0.5);
+        /* World status mini-panel */
+        .world-status-mini {
+            background: rgba(45, 56, 67, 0.3);
+            margin: 16px 20px;
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid rgba(58, 73, 85, 0.3);
         }
 
-        /* Loading indicator */
-        .typing-indicator {
+        .world-status-title {
+            font-size: 12px;
+            color: #8ea6b4;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-indicators {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .status-mini {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+        }
+
+        .status-mini-value {
+            font-weight: 500;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: absolute;
+                z-index: 100;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .chat-main {
+                width: 100%;
+            }
+        }
+
+        /* Loading states */
+        .loading {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 16px;
-            background: #1f2c33;
-            border-radius: 16px;
-            border-top-left-radius: 4px;
-            margin-bottom: 12px;
-            max-width: 70%;
+            color: #8ea6b4;
+            font-style: italic;
         }
 
-        .typing-dots {
-            display: flex;
-            gap: 3px;
-        }
-
-        .typing-dot {
-            width: 4px;
-            height: 4px;
-            background: #8696a0;
+        .loading::after {
+            content: "";
+            width: 12px;
+            height: 12px;
+            border: 2px solid transparent;
+            border-top: 2px solid #8ea6b4;
             border-radius: 50%;
-            animation: typing 1.4s infinite;
+            animation: spin 1s linear infinite;
         }
 
-        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes typing {
-            0%, 60%, 100% { opacity: 0.3; }
-            30% { opacity: 1; }
-        }
-
-        /* Tool Results Styles */
-        .tool-results {
-            background: #0d1418;
-            border: 1px solid #2d3843;
-            border-radius: 8px;
-            margin: 8px 0;
-            padding: 12px;
-        }
-
-        .tool-results-header {
-            font-size: 12px;
-            color: #8696a0;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .tool-result {
-            background: #1a2429;
-            border-radius: 6px;
-            margin: 6px 0;
-            padding: 8px 10px;
-            border-left: 3px solid #00a884;
-        }
-
-        .tool-info {
-            font-size: 11px;
-            color: #a8bac7;
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-
-        .tool-result-preview {
-            font-size: 10px;
-            color: #8696a0;
-            background: #0f1419;
-            padding: 4px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            word-break: break-all;
-            max-height: 40px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .tool-result-error {
-            font-size: 10px;
-            color: #ff6b6b;
-            background: #2d1b1b;
-            padding: 4px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-        }
-
-        .tool-result:last-child {
-            margin-bottom: 0;
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Start screen overlay -->
-    <div id="start-overlay" class="start-overlay">
-        <div class="start-card">
-            <h1>🏛️ The Oval Office</h1>
-            <p>Step into the role of President. Your advisors are ready to brief you on urgent matters requiring your immediate attention.</p>
-            <button class="start-button" onclick="startGame()">Enter the Oval Office</button>
-        </div>
-    </div>
-
-    <!-- Main chat interface -->
-    <div class="chat-container">
-        <!-- Sidebar -->
+    <div class="app-container">
+        <!-- Left Sidebar -->
         <div class="sidebar">
-            <div class="sidebar-header">
-                <h1>🇺🇸 United States</h1>
-                <p>Presidential Command</p>
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <div class="profile-avatar">RG</div>
+                <div class="profile-info">
+                    <div class="profile-name">Ronald Grump</div>
+                    <div class="profile-status">President of the United States</div>
+                </div>
+                <div class="profile-settings" onclick="showSettings()">⚙️</div>
             </div>
-            <div class="world-status" id="world-status">
-                <!-- World state will be populated here -->
+
+            <!-- Chat List -->
+            <div class="chat-list">
+                <!-- Active Oval Office Chat -->
+                <div class="chat-item active" onclick="openOvalOffice()">
+                    <div class="chat-header-info">
+                        <div class="chat-avatar oval-office-avatar">🏛️</div>
+                        <div class="chat-meta">
+                            <div class="chat-title">The Oval Office</div>
+                            <div class="chat-preview">Presidential Crisis Management</div>
+                        </div>
+                        <div class="chat-time">Now</div>
+                    </div>
+                    <div class="notification-badge" id="oval-office-notifications">1</div>
+                </div>
+
+                <!-- Coming Soon Game Modes -->
+                <div class="chat-item" onclick="showComingSoon()">
+                    <div class="chat-header-info">
+                        <div class="chat-avatar coming-soon-avatar">🚀</div>
+                        <div class="chat-meta">
+                            <div class="chat-title">Space Station Command</div>
+                            <div class="chat-preview">Manage orbital operations and crew</div>
+                        </div>
+                    </div>
+                    <div class="coming-soon-badge">Soon</div>
+                </div>
+
+                <div class="chat-item" onclick="showComingSoon()">
+                    <div class="chat-header-info">
+                        <div class="chat-avatar coming-soon-avatar">🏢</div>
+                        <div class="chat-meta">
+                            <div class="chat-title">Corporate Boardroom</div>
+                            <div class="chat-preview">Navigate high-stakes business decisions</div>
+                        </div>
+                    </div>
+                    <div class="coming-soon-badge">Soon</div>
+                </div>
+
+                <div class="chat-item" onclick="showComingSoon()">
+                    <div class="chat-header-info">
+                        <div class="chat-avatar coming-soon-avatar">⚔️</div>
+                        <div class="chat-meta">
+                            <div class="chat-title">Military Command</div>
+                            <div class="chat-preview">Lead tactical operations</div>
+                        </div>
+                    </div>
+                    <div class="coming-soon-badge">Soon</div>
+                </div>
+
+                <div class="chat-item" onclick="showComingSoon()">
+                    <div class="chat-header-info">
+                        <div class="chat-avatar coming-soon-avatar">🏥</div>
+                        <div class="chat-meta">
+                            <div class="chat-title">Hospital Emergency</div>
+                            <div class="chat-preview">Manage medical crisis situations</div>
+                        </div>
+                    </div>
+                    <div class="coming-soon-badge">Soon</div>
+                </div>
+
+                <div class="chat-item" onclick="showComingSoon()">
+                    <div class="chat-header-info">
+                        <div class="chat-avatar coming-soon-avatar">🌍</div>
+                        <div class="chat-meta">
+                            <div class="chat-title">Climate Summit</div>
+                            <div class="chat-preview">Navigate global environmental negotiations</div>
+                        </div>
+                    </div>
+                    <div class="coming-soon-badge">Soon</div>
+                </div>
+            </div>
+
+            <!-- World Status Mini Panel -->
+            <div class="world-status-mini" id="world-status-mini">
+                <div class="world-status-title">Current Administration</div>
+                <div class="status-indicators">
+                    <div class="status-mini">
+                        <span>Economy</span>
+                        <span class="status-mini-value status-neutral" id="economy-mini">65</span>
+                    </div>
+                    <div class="status-mini">
+                        <span>Trust</span>
+                        <span class="status-mini-value status-warning" id="trust-mini">55</span>
+                    </div>
+                    <div class="status-mini">
+                        <span>Military</span>
+                        <span class="status-mini-value status-good" id="military-mini">70</span>
+                    </div>
+                    <div class="status-mini">
+                        <span>Global</span>
+                        <span class="status-mini-value status-neutral" id="global-mini">60</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Main chat -->
-        <div class="chat-main">
-            <div class="chat-header" id="chat-header">
-                <div class="event-indicator"></div>
-                <div class="event-info">
-                    <h2 id="event-title">Waiting for briefing...</h2>
-                    <span class="event-urgency" id="event-urgency">Standing by</span>
-                </div>
+        <!-- Main Chat Area -->
+        <div class="chat-main" id="chat-main">
+            <!-- Welcome Screen -->
+            <div class="welcome-screen">
+                <div class="welcome-logo">🏛️</div>
+                <h1 class="welcome-title">Welcome to Agent Stage</h1>
+                <p class="welcome-subtitle">
+                    Experience immersive political simulation with AI-powered advisors. 
+                    Make critical decisions as the President with real-world intelligence and professional voice synthesis.
+                </p>
+                <button class="start-button" onclick="startGame()">
+                    Enter the Oval Office
+                </button>
             </div>
 
+            <!-- Chat Header (hidden by default) -->
+            <div class="chat-header">
+                <div class="chat-header-avatar">🏛️</div>
+                <div class="chat-header-info">
+                    <h2>The Oval Office</h2>
+                    <div class="chat-header-status">Presidential Crisis Management</div>
+                </div>
+                <div class="urgency-indicator urgency-critical" id="urgency-indicator"></div>
+            </div>
+
+            <!-- Messages Area (hidden by default) -->
             <div class="messages" id="messages">
-                <div class="message system">
-                    <div class="system-message">Secure connection established</div>
-                </div>
+                <!-- Messages will be populated here -->
             </div>
 
+            <!-- Input Area (hidden by default) -->
             <div class="input-area">
-                <div class="input-container">
-                    <textarea 
-                        id="decision-input" 
-                        class="decision-input" 
-                        placeholder="Type your decision..."
-                        rows="1"
-                    ></textarea>
-                    <button id="send-button" class="send-button" onclick="sendDecision()">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="currentColor"/>
-                        </svg>
-                    </button>
-                </div>
+                <textarea 
+                    class="input-field" 
+                    id="message-input" 
+                    placeholder="Make your presidential decision..."
+                    rows="1"
+                    maxlength="500"
+                ></textarea>
+                <button class="send-button" id="send-button" onclick="sendDecision()">➤</button>
             </div>
         </div>
     </div>
 
-    <script src="game.js"></script>
+    <script src="game_signal.js"></script>
+    <script>
+        // Signal-like interface functions
+        let gameSession = null;
+        let currentEvent = null;
+        
+        function openOvalOffice() {
+            // Remove active class from other chats
+            document.querySelectorAll('.chat-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to Oval Office
+            document.querySelector('.chat-item').classList.add('active');
+            
+            // Show chat interface
+            document.getElementById('chat-main').classList.add('active');
+            
+            // Initialize game if not already done
+            if (!gameSession) {
+                enterOvalOffice();
+            }
+        }
+        
+        function enterOvalOffice() {
+            console.log('enterOvalOffice called');
+            document.getElementById('chat-main').classList.add('active');
+            
+            // Ensure startGame function is available
+            if (typeof startGame === 'function') {
+                console.log('Starting game...');
+                startGame();
+            } else {
+                console.error('startGame function not available, retrying...');
+                // Retry after a short delay
+                setTimeout(() => {
+                    if (typeof startGame === 'function') {
+                        startGame();
+                    } else {
+                        console.error('startGame still not available');
+                        addMessage('⚠️ Game initialization failed. Please refresh the page.', 'system');
+                    }
+                }, 500);
+            }
+        }
+        
+        function showComingSoon() {
+            // Remove active from all chats
+            document.querySelectorAll('.chat-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Hide chat interface
+            document.getElementById('chat-main').classList.remove('active');
+            
+            // Show coming soon message
+            const messages = document.getElementById('messages');
+            messages.innerHTML = `
+                <div class="message system">
+                    <div class="message-content">
+                        <div class="message-text">
+                            🚧 This game mode is coming soon! Stay tuned for exciting new simulation experiences.
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function showSettings() {
+            alert('Settings: Profile - Ronald Grump\nStatus: President of the United States\n\nNote: This is cosmetic only and does not affect gameplay.');
+        }
+        
+        // Test function to debug the button
+        function testGame() {
+            console.log('testGame called!');
+            alert('Test function called - now testing startGame...');
+            
+            console.log('startGame available:', typeof startGame);
+            console.log('window.startGame available:', typeof window.startGame);
+            
+            // Try to call startGame directly
+            if (typeof window.startGame === 'function') {
+                console.log('Calling window.startGame...');
+                window.startGame();
+            } else if (typeof startGame === 'function') {
+                console.log('Calling startGame...');
+                startGame();
+            } else {
+                alert('startGame function not found!');
+                console.error('startGame not available');
+            }
+        }
+        
+        // Auto-resize textarea and initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded');
+            
+            const input = document.getElementById('message-input');
+            if (input) {
+                input.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+                });
+                
+                // Send on Enter (not Shift+Enter)
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendDecision();
+                    }
+                });
+            }
+            
+            // Test if external functions are loaded
+            setTimeout(() => {
+                console.log('startGame available:', typeof startGame === 'function');
+                console.log('sendDecision available:', typeof sendDecision === 'function');
+            }, 100);
+        });
+        
+        // Update notification badges
+        function updateNotificationBadge(count) {
+            const badge = document.getElementById('oval-office-notifications');
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+        
+        // Update world status mini panel
+        function updateWorldStatusMini(worldState) {
+            if (worldState) {
+                document.getElementById('economy-mini').textContent = worldState.economy;
+                document.getElementById('trust-mini').textContent = worldState.publicTrust;
+                document.getElementById('military-mini').textContent = worldState.military;
+                document.getElementById('global-mini').textContent = worldState.globalReputation;
+                
+                // Update colors based on values
+                updateStatusColor('economy-mini', worldState.economy);
+                updateStatusColor('trust-mini', worldState.publicTrust);
+                updateStatusColor('military-mini', worldState.military);
+                updateStatusColor('global-mini', worldState.globalReputation);
+            }
+        }
+        
+        function updateStatusColor(elementId, value) {
+            const element = document.getElementById(elementId);
+            element.className = 'status-mini-value';
+            
+            if (value >= 80) element.classList.add('status-good');
+            else if (value >= 60) element.classList.add('status-neutral');
+            else if (value >= 40) element.classList.add('status-warning');
+            else element.classList.add('status-critical');
+        }
+        
+        // Override the original addMessage function to work with Signal-style interface
+        function addMessage(content, type = 'system', sender = '', audioUrl = '', timestamp = new Date()) {
+            const messages = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            let avatarClass = 'system-avatar';
+            let senderName = sender;
+            
+            if (type === 'user') {
+                avatarClass = 'user-avatar';
+                senderName = 'President';
+            } else if (type === 'advisor') {
+                avatarClass = 'advisor-avatar';
+            }
+            
+            const timeStr = timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar ${avatarClass}">
+                    ${type === 'user' ? 'RG' : (type === 'advisor' ? sender.charAt(0) : '🤖')}
+                </div>
+                <div class="message-content">
+                    ${senderName ? `<div class="message-sender">${senderName}</div>` : ''}
+                    <div class="message-text">${content}</div>
+                    ${audioUrl ? `<button class="play-button" onclick="playAudio('${audioUrl}')">🔊 Play</button>` : ''}
+                    <div class="message-time">${timeStr}</div>
+                </div>
+            `;
+            
+            messages.appendChild(messageDiv);
+            messages.scrollTop = messages.scrollHeight;
+            
+            // Update notification badge
+            const currentBadgeCount = parseInt(document.getElementById('oval-office-notifications').textContent || '0');
+            updateNotificationBadge(currentBadgeCount + 1);
+        }
+    </script>
 </body>
 </html>

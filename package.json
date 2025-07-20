@@ -1,7 +1,7 @@
 {
   "name": "agent_stage",
   "version": "1.0.0",
-  "description": "A modular, chat-based AI theater platform featuring The Oval Office presidential simulation",
+  "description": "Professional AI theater simulation with ElevenLabs voice synthesis, OpenAI GPT intelligence, and real-world research capabilities",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",

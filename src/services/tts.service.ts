@@ -28,19 +28,19 @@ export class TTSService {
     advisorName: string
   ): Promise<string> {
     try {
-      // ElevenLabs voice mapping optimized for each advisor's personality
+      // ElevenLabs voice mapping optimized for each advisor's personality and gender
       const voiceMap: Record<string, string> = {
-        // Original 4 advisors - using premium ElevenLabs voices
-        'chief_staff': 'pNInz6obpgDQGcFmaJgB',           // Adam - energetic young political operative (DJ Vans)
+        // MALE ADVISORS - Using distinctly masculine voices
+        'chief_staff': 'ErXwobaYiN019PkySvjV',           // Josh - young, energetic male (DJ Vans/JD Vance)
         'national_security': 'Zlb1dXrM653N07WRdFW3',      // Antoni - deep, authoritative military voice (General)
-        'tech_advisor': 'EXAVITQu4vr4xnSDxMaL',          // Bella - quirky, distinctive (Ilon Tusk)
-        'counselor': 'MF3mGyEYCl7XYWbV9V6O',             // Elli - professional female political voice (Kellyanne)
-        
-        // New 4 advisors - expanding with more ElevenLabs voices
-        'economic_advisor': 'LcfcDJNUP1GQjkzn1xUU',       // Emily - sophisticated economist voice (Dr. Janet)
+        'tech_advisor': 'flq6f7yk4E4fJM5XTYuZ',          // Michael - eccentric, distinctive male (Ilon Tusk/Elon)
         'healthcare_advisor': 'pqHfZKP75CvOlQylNhV4',     // Bill - authoritative medical expert (Dr. Anthony)
+        
+        // FEMALE ADVISORS - Using distinctly feminine voices  
+        'counselor': 'MF3mGyEYCl7XYWbV9V6O',             // Elli - professional female political voice (Kellyanne)
+        'economic_advisor': 'LcfcDJNUP1GQjkzn1xUU',       // Emily - sophisticated economist voice (Dr. Janet)
         'environmental_advisor': '21m00Tcm4TlvDq8ikWAM',   // Rachel - passionate young female activist (Alexandria)
-        'intelligence_advisor': 'AZnzlk1XvdvUeBnXmlld',    // Domi - mysterious, secretive voice (Director Sarah)
+        'intelligence_advisor': 'AZnzlk1XvdvUeBnXmlld',    // Domi - mysterious, secretive female voice (Director Sarah)
       };
 
       const voiceId = voiceMap[advisorId] || 'pNInz6obpgDQGcFmaJgB'; // Default to Adam
